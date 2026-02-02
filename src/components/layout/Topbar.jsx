@@ -24,7 +24,7 @@ const Topbar = ({
         {/* Logo - Mobile/Tablet */}
         <div className="topbar__logo">
           <img 
-            src="/src/assets/images/logo.png" 
+            src="/public/logo.png" 
             alt="SorBit" 
             className="topbar__logo-image"
           />
