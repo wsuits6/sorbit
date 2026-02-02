@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import Hero from './components/layout/Hero';
 import Dashboard from './pages/Dashboard';
@@ -71,12 +71,12 @@ function App() {
         {/* Landing page with Hero */}
         <Route path="/" element={<Hero />} />
         
-        {/* Dashboard routes */}
-        <Route path="/" element={<Layout navigationItems={navigationItems} user={mockUser} />}>
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="accounts" element={<Accounts />} />
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="settings" element={<Settings />} />
+        {/* Dashboard routes with Layout wrapper */}
+        <Route element={<Layout navigationItems={navigationItems} user={mockUser} />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/accounts" element={<Accounts />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
       </Routes>
     </Router>
