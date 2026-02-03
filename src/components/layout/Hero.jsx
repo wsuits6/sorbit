@@ -1,21 +1,94 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../../hooks/useTheme';
+import FeatureCard from '../ui/FeatureCard';
+import TeamSection from '../sections/TeamSection';
 import './Hero.css';
 
 const Hero = () => {
   const navigate = useNavigate();
+  const { theme, toggleTheme, isDark } = useTheme();
 
   const handleConnectAccount = () => {
     navigate('/dashboard');
   };
 
   const handleWatchDemo = () => {
-    // You can add a demo video modal or navigate to a demo page
     alert('Demo video coming soon!');
   };
 
+  // Feature cards data
+  const features = [
+    {
+      id: 1,
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+      ),
+      title: 'Multi-Platform',
+      description: 'Connect and manage all your social media accounts from one powerful dashboard',
+      color: '#1877F2'
+    },
+    {
+      id: 2,
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M3 3v18h18" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M18 17V9m-5 8V5M8 17v-3" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      ),
+      title: 'Real-Time Analytics',
+      description: 'Track engagement, followers, and performance metrics in real-time',
+      color: '#22C55E'
+    },
+    {
+      id: 3,
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M8 2v4M16 2v4M3 10h18" strokeLinecap="round" strokeLinejoin="round"/>
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+        </svg>
+      ),
+      title: 'Smart Scheduling',
+      description: 'Schedule posts across platforms and optimize posting times automatically',
+      color: '#F59E0B'
+    },
+    {
+      id: 4,
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      ),
+      title: 'Secure & Private',
+      description: 'Your data is encrypted and protected with enterprise-grade security',
+      color: '#8B5CF6'
+    }
+  ];
+
   return (
-    <section className="hero">
+    <section className="hero" data-theme={theme}>
+      {/* Theme Toggle Button */}
+      <button 
+        className="hero__theme-toggle"
+        onClick={toggleTheme}
+        aria-label="Toggle theme"
+      >
+        {isDark ? (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42m12.72-12.72 1.42-1.42" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        )}
+      </button>
+
       <div className="hero__background">
         <div className="hero__shape hero__shape--1"></div>
         <div className="hero__shape hero__shape--2"></div>
@@ -136,6 +209,24 @@ const Hero = () => {
           <div className="hero__decoration hero__decoration--3"></div>
         </div>
       </div>
+
+      {/* Feature Cards Section */}
+      <div className="hero__features">
+        <div className="hero__features-header">
+          <h2 className="hero__features-title">Why Choose SorBit?</h2>
+          <p className="hero__features-subtitle">
+            Everything you need to manage your social media presence effectively
+          </p>
+        </div>
+        <div className="hero__features-grid">
+          {features.map((feature) => (
+            <FeatureCard key={feature.id} {...feature} />
+          ))}
+        </div>
+      </div>
+
+      {/* Meet the Team Section */}
+      <TeamSection />
 
       <div className="hero__scroll-indicator">
         <div className="hero__scroll-mouse">
