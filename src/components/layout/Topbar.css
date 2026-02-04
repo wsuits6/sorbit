@@ -14,7 +14,7 @@
   padding: 0 var(--spacing-xl);
   z-index: var(--z-sticky);
   transition: left var(--transition-base);
-  box-shadow: var(--elevation-1);
+  /* box-shadow: var(--elevation-1); */
 }
 
 /* Left Section */

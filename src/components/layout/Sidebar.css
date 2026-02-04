@@ -12,7 +12,7 @@
   flex-direction: column;
   z-index: var(--z-fixed);
   transition: transform var(--transition-base);
-  box-shadow: var(--elevation-2);
+  /* box-shadow: var(--elevation-2); */
 }
 
 /* Logo Section */
@@ -27,7 +27,7 @@
   position: relative;
 }
 
-.sidebar__logo::after {
+/* .sidebar__logo::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -36,11 +36,13 @@
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--primary), transparent);
   opacity: 0.5;
-}
+} */
 
 .sidebar__logo-image {
   max-width: 160px;
-  height: auto;
+  height: 100px;
+  position: absolute;
+  right: 152px;
   object-fit: contain;
   filter: drop-shadow(0 2px 8px rgba(24, 119, 242, 0.3));
   transition: transform var(--transition-base);
@@ -67,6 +69,7 @@
 .sidebar__menu-item {
   margin-bottom: var(--spacing-xs);
   padding: 0 var(--spacing-md);
+  margin: 30px;
 }
 
 .sidebar__link {

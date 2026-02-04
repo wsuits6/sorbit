@@ -28,34 +28,34 @@ const TeamSection = () => {
     },
     {
       id: 2,
-      name: 'Michael Chen',
-      role: 'CTO',
+      name: null,
+      role: null,
       // 📸 IMAGE LINK: Replace null with your image URL
       imageUrl: null,
-      bio: 'Tech expert specializing in scalable social media platforms',
+      bio: null,
       social: {
-        twitter: 'https://twitter.com/michaelchen',
-        linkedin: 'https://linkedin.com/in/michaelchen',
-        github: 'https://github.com/michaelchen'
+        twitter: null,
+        linkedin: null,
+        github: null
       }
     },
     {
       id: 3,
-      name: 'Emily Rodriguez',
-      role: 'Head of Design',
+      name: null,
+      role: null,
       // 📸 IMAGE LINK: Replace null with your image URL
       imageUrl: null,
       bio: 'Creative designer crafting beautiful user experiences',
       social: {
-        twitter: 'https://twitter.com/emilyrodriguez',
-        linkedin: 'https://linkedin.com/in/emilyrodriguez',
+        twitter: null,
+        linkedin: null,
         github: null
       }
     },
     {
       id: 4,
-      name: 'David Kim',
-      role: 'Head of Analytics',
+      name: null,
+      role: null,
       // 📸 IMAGE LINK: Replace null with your image URL
       imageUrl: null,
       bio: 'Data scientist turning insights into actionable strategies',

@@ -132,7 +132,7 @@
 }
 
 .hero__logo {
-  width: 180px;
+  width: 200px;
   height: auto;
   filter: drop-shadow(0 4px 12px rgba(24, 119, 242, 0.3));
 }
@@ -598,7 +598,7 @@
   }
 
   .hero__logo {
-    width: 150px;
+    width: 250px;
   }
 
   .hero__title {
@@ -614,7 +614,7 @@
   }
 
   .hero__stats {
-    flex-direction: column;
+    flex-direction: row;
     gap: var(--spacing-md);
   }
 
