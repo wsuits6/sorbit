@@ -1,20 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
 import FeatureCard from '../ui/FeatureCard';
 import TeamSection from '../sections/TeamSection';
+import VideoModal from '../ui/VideoModal';
 import './Hero.css';
 
 const Hero = () => {
   const navigate = useNavigate();
   const { theme, toggleTheme, isDark } = useTheme();
+  const [showVideoModal, setShowVideoModal] = useState(false);
 
   const handleConnectAccount = () => {
-    navigate('/login')
+    navigate('/login');
   };
 
   const handleWatchDemo = () => {
-    alert('Demo video coming soon!');
+    setShowVideoModal(true);
   };
 
   // Feature cards data
@@ -234,6 +236,15 @@ const Hero = () => {
         </div>
         <span className="hero__scroll-text">Scroll to explore</span>
       </div>
+
+      {/* Video Modal */}
+      <VideoModal
+        isOpen={showVideoModal}
+        onClose={() => setShowVideoModal(false)}
+        videoUrl="https://www.youtube.com/embed/dQw4w9WgXcQ"
+        title="SorBit Platform Demo"
+        autoPlay={true}
+      />
     </section>
   );
 };
