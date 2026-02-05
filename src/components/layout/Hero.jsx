@@ -143,12 +143,12 @@ const Hero = () => {
 
           <div className="hero__stats">
             <div className="hero__stat">
-              <span className="hero__stat-value">50K+</span>
+              <span className="hero__stat-value">0</span>
               <span className="hero__stat-label">Active Users</span>
             </div>
             <div className="hero__stat-divider"></div>
             <div className="hero__stat">
-              <span className="hero__stat-value">1M+</span>
+              <span className="hero__stat-value">0</span>
               <span className="hero__stat-label">Posts Managed</span>
             </div>
             <div className="hero__stat-divider"></div>
