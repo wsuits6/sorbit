@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
+import { useAuth } from '../context/AuthContext';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Loader from '../components/ui/Loader';
@@ -21,6 +22,7 @@ import './Register.css';
 const Register = () => {
   const navigate = useNavigate();
   const { theme, toggleTheme, isDark } = useTheme();
+  const { register } = useAuth();
   
   // Form state
   const [formData, setFormData] = useState({
@@ -119,14 +121,10 @@ const Register = () => {
     
     try {
       setLoading(true);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Navigate to dashboard on success
-      navigate('/dashboard');
+      await register(formData.fullName.trim(), formData.email, formData.password);
+      navigate('/dashboard', { replace: true });
     } catch (error) {
-      setErrors({ submit: 'Registration failed. Please try again.' });
+      setErrors({ submit: error?.message || 'Registration failed. Please try again.' });
     } finally {
       setLoading(false);
     }

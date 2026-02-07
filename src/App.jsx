@@ -11,39 +11,48 @@ import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
 import Register from './pages/Register';
-
-// Mock user data
-const mockUser = {
-  name: 'Osman Wunpini',
-  email: 'osmanple.com',
-  role: 'Admin',
-  avatar: null,
-};
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<Hero />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        
-        {/* Protected dashboard routes with NEW MOBILE LAYOUT */}
-        <Route element={<MobileLayout user={mockUser} />}>
-          <Route path="/dashboard" element={<NewDashboard />} />
-          <Route path="/post" element={<PostComposer />} />
-          <Route path="/accounts" element={<Accounts />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/settings" element={<Settings />} />
-        </Route>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<Hero />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          
+          {/* Protected dashboard routes with NEW MOBILE LAYOUT */}
+          <Route
+            element={(
+              <ProtectedRoute>
+                <MobileLayout />
+              </ProtectedRoute>
+            )}
+          >
+            <Route path="/dashboard" element={<NewDashboard />} />
+            <Route path="/post" element={<PostComposer />} />
+            <Route path="/accounts" element={<Accounts />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/settings" element={<Settings />} />
+          </Route>
 
-        {/* Legacy routes with old layout (for comparison) */}
-        <Route path="/old/*" element={<Layout navigationItems={[]} user={mockUser} />}>
-          <Route path="dashboard" element={<Dashboard />} />
-        </Route>
-      </Routes>
-    </Router>
+          {/* Legacy routes with old layout (for comparison) */}
+          <Route
+            path="/old/*"
+            element={(
+              <ProtectedRoute>
+                <Layout navigationItems={[]} />
+              </ProtectedRoute>
+            )}
+          >
+            <Route path="dashboard" element={<Dashboard />} />
+          </Route>
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

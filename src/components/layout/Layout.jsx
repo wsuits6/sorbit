@@ -3,12 +3,14 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 import { useTheme } from '../../hooks/useTheme';
+import { useAuth } from '../../context/AuthContext';
 import './Layout.css';
 
-const Layout = ({ navigationItems, user }) => {
+const Layout = ({ navigationItems }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { theme, toggleTheme, isDark } = useTheme();
   const location = useLocation();
+  const { user } = useAuth();
 
   // Determine if we should show the back button (when inside dashboard)
   const showBackButton = location.pathname !== '/';

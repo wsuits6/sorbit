@@ -14,8 +14,8 @@ const fetchAPI = async (endpoint, options = {}) => {
     'Content-Type': 'application/json',
   };
 
-  // Get token from localStorage if available
-  const token = localStorage.getItem('authToken');
+  // Get token from sessionStorage if available
+  const token = sessionStorage.getItem('authAccessToken');
   if (token) {
     defaultHeaders['Authorization'] = `Bearer ${token}`;
   }

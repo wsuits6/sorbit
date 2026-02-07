@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
+import { useAuth } from '../context/AuthContext';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Loader from '../components/ui/Loader';
@@ -20,6 +21,7 @@ import './Login.css';
 const Login = () => {
   const navigate = useNavigate();
   const { theme, toggleTheme, isDark } = useTheme();
+  const { login } = useAuth();
   
   // Form state
   const [formData, setFormData] = useState({
@@ -77,14 +79,10 @@ const Login = () => {
     
     try {
       setLoading(true);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Navigate to dashboard on success
-      navigate('/dashboard');
+      await login(formData.email, formData.password);
+      navigate('/dashboard', { replace: true });
     } catch (error) {
-      setErrors({ submit: 'Invalid email or password' });
+      setErrors({ submit: error?.message || 'Invalid email or password' });
     } finally {
       setLoading(false);
     }

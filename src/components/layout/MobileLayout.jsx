@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
+import { useAuth } from '../../context/AuthContext';
 import './MobileLayout.css';
 
 /**
@@ -16,10 +17,11 @@ import './MobileLayout.css';
  * - Large touch targets (minimum 48px)
  * - Clear visual hierarchy
  */
-const MobileLayout = ({ user }) => {
+const MobileLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, toggleTheme, isDark } = useTheme();
+  const { user } = useAuth();
   const [showNotifications, setShowNotifications] = useState(false);
 
   // Bottom navigation items
