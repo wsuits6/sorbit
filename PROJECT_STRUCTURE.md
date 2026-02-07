@@ -63,6 +63,20 @@ sorbit/
 │   ├── App.jsx                     # Main app component with routing
 │   └── main.jsx                    # App entry point
 │
+├── server/
+│   ├── data/                        # SQLite database location
+│   ├── src/
+│   │   ├── middleware/
+│   │   │   └── auth.js              # JWT auth middleware
+│   │   ├── routes/
+│   │   │   └── auth.js              # Auth routes
+│   │   ├── utils/
+│   │   │   └── tokens.js            # JWT helpers
+│   │   ├── db.js                    # SQLite setup
+│   │   └── index.js                 # Express server entry
+│   ├── .env.example                 # Backend env template
+│   └── package.json                 # Backend dependencies
+│
 ├── .gitignore                      # Git ignore rules
 ├── FEATURES.md                     # Features checklist
 ├── index.html                      # HTML entry point
@@ -95,6 +109,7 @@ sorbit/
 | `SETUP.md` | Quick setup guide |
 | `FEATURES.md` | Complete features list |
 | `PROJECT_STRUCTURE.md` | This file - project structure |
+| `server/` | Auth backend (Express + SQLite + JWT) |
 
 ### Source Files (`src/`)
 

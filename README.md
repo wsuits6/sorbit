@@ -43,6 +43,43 @@ npm run dev
 
 5. Open your browser and navigate to `http://localhost:3000`
 
+## 🔐 Backend (Auth API)
+
+This repo now includes a simple Node + Express auth server using SQLite and JWT.
+
+### Setup
+
+1. Install backend dependencies:
+```bash
+cd server
+npm install
+```
+
+2. Configure environment:
+```bash
+cp .env.example .env
+```
+Update the JWT secrets in `server/.env`.
+
+3. Start the backend:
+```bash
+npm run dev
+```
+
+The API will run at `http://localhost:4000` by default.
+To point the frontend to the backend, create a root `.env` with:
+```bash
+VITE_API_BASE_URL=http://localhost:4000
+```
+
+### Endpoints
+
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/auth/refresh`
+- `POST /api/auth/logout`
+- `GET /api/auth/me`
+
 ## 📁 Project Structure
 ```
 sorbit/
