@@ -1,66 +1,46 @@
 import React from 'react';
-import Loader from '../ui/Loader';
 import './StatCard.css';
 
-const StatCard = ({ 
-  title, 
-  value, 
-  change, 
-  icon,
-  trend = 'up',
-  loading = false,
-  className = '',
-  ...props 
-}) => {
-  const cardClasses = [
-    'stat-card',
-    loading && 'stat-card--loading',
-    className,
-  ].filter(Boolean).join(' ');
-
-  const changeClasses = [
-    'stat-card__change',
-    trend === 'up' && change > 0 && 'stat-card__change--positive',
-    trend === 'down' && change < 0 && 'stat-card__change--negative',
-    change === 0 && 'stat-card__change--neutral',
-  ].filter(Boolean).join(' ');
-
-  const getTrendIcon = () => {
-    if (change === 0) return '•';
-    if (trend === 'up' && change > 0) return '↑';
-    if (trend === 'up' && change < 0) return '↓';
-    if (trend === 'down' && change > 0) return '↓';
-    if (trend === 'down' && change < 0) return '↑';
-    return '•';
-  };
+/**
+ * StatCard Component
+ * 
+ * Reusable stat card for displaying metrics
+ * Used in Desktop Dashboard
+ * 
+ * @param {Object} icon - SVG icon element
+ * @param {String} label - Stat label (e.g., "Total Followers")
+ * @param {String|Number} value - Main stat value
+ * @param {Number} change - Percentage change (positive or negative)
+ * @param {String} color - Accent color for the card
+ */
+const StatCard = ({ icon, label, value, change, color = '#0066F5' }) => {
+  const isPositive = change > 0;
+  const isNegative = change < 0;
 
   return (
-    <div className={cardClasses} {...props}>
-      <div className="stat-card__header">
-        <div className="stat-card__icon-wrapper">
-          {icon && <div className="stat-card__icon">{icon}</div>}
-        </div>
-        <div className="stat-card__title">{title}</div>
+    <div className="stat-card" style={{ '--stat-color': color }}>
+      <div className="stat-card__icon" style={{ background: `${color}15`, color: color }}>
+        {icon}
       </div>
-
-      <div className="stat-card__body">
-        {loading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
-            <Loader size="small" />
+      
+      <div className="stat-card__content">
+        <div className="stat-card__value">{value}</div>
+        <div className="stat-card__label">{label}</div>
+        
+        {change !== null && change !== undefined && (
+          <div className={`stat-card__change ${isPositive ? 'stat-card__change--up' : isNegative ? 'stat-card__change--down' : ''}`}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              {isPositive ? (
+                <path d="m18 15-6-6-6 6" strokeLinecap="round" strokeLinejoin="round"/>
+              ) : isNegative ? (
+                <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round"/>
+              ) : (
+                <path d="M5 12h14" strokeLinecap="round" strokeLinejoin="round"/>
+              )}
+            </svg>
+            <span>{Math.abs(change)}%</span>
+            <span className="stat-card__change-label">this week</span>
           </div>
-        ) : (
-          <>
-            <div className="stat-card__value">{value}</div>
-            {change !== undefined && change !== null && (
-              <div className={changeClasses}>
-                <span className="stat-card__trend-icon">{getTrendIcon()}</span>
-                <span className="stat-card__change-value">
-                  {Math.abs(change)}%
-                </span>
-                <span className="stat-card__change-label">vs last month</span>
-              </div>
-            )}
-          </>
         )}
       </div>
     </div>
