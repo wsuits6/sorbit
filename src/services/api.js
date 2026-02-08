@@ -1,5 +1,5 @@
 // API Base URL - Replace with your actual API endpoint
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.example.com';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 
 /**
  * Generic fetch wrapper with error handling
