@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
+import { useAuth } from '../../context/AuthContext';
+import Modal from '../ui/Modal';
 import './Topbar.css';
 
 /**
@@ -17,12 +19,16 @@ import './Topbar.css';
  */
 const Topbar = ({ user }) => {
   const navigate = useNavigate();
-  const { theme, toggleTheme, isDark } = useTheme();
+  const { toggleTheme, isDark } = useTheme();
+  const { logout } = useAuth();
   
   // State management
   const [showNotifications, setShowNotifications] = useState(false);
-  const [showAccountMenu, setShowAccountMenu] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showNotificationsModal, setShowNotificationsModal] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [notifications, setNotifications] = useState([
     {
       id: 1,
@@ -73,7 +79,7 @@ const Topbar = ({ user }) => {
         setShowNotifications(false);
       }
       if (accountMenuRef.current && !accountMenuRef.current.contains(event.target)) {
-        setShowAccountMenu(false);
+        setShowProfileModal(false);
       }
     };
 
@@ -111,31 +117,23 @@ const Topbar = ({ user }) => {
   };
 
   // Account menu actions
-  const handleProfile = () => {
-    setShowAccountMenu(false);
-    navigate('/settings');
-  };
-
   const handleSettings = () => {
-    setShowAccountMenu(false);
     navigate('/settings');
   };
 
   const handleBilling = () => {
-    setShowAccountMenu(false);
     navigate('/settings?tab=billing');
   };
 
   const handleLogout = () => {
-    setShowAccountMenu(false);
-    // Implement logout logic
-    console.log('Logging out...');
+    logout();
     navigate('/login');
   };
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
+    <>
     <header className="topbar">
       <div className="topbar__container">
         {/* Search Bar */}
@@ -192,6 +190,7 @@ const Topbar = ({ user }) => {
             className="topbar__icon-btn"
             aria-label="Help"
             title="Help & Support"
+            onClick={() => setShowHelpModal(true)}
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="12" cy="12" r="10"/>
@@ -269,7 +268,7 @@ const Topbar = ({ user }) => {
 
                 {notifications.length > 0 && (
                   <div className="topbar__dropdown-footer">
-                    <button className="topbar__view-all-btn">
+                    <button className="topbar__view-all-btn" onClick={() => setShowNotificationsModal(true)}>
                       View all notifications
                     </button>
                   </div>
@@ -280,10 +279,10 @@ const Topbar = ({ user }) => {
 
           {/* User Account Menu */}
           <div className="topbar__dropdown" ref={accountMenuRef}>
-            <button 
-              className={`topbar__user-btn ${showAccountMenu ? 'topbar__user-btn--active' : ''}`}
-              onClick={() => setShowAccountMenu(!showAccountMenu)}
-              aria-label="Account menu"
+            <button
+              className="topbar__user-btn"
+              onClick={() => setShowProfileModal(true)}
+              aria-label="Profile"
             >
               {user?.avatar ? (
                 <img src={user.avatar} alt={user.name} className="topbar__user-avatar" />
@@ -296,84 +295,85 @@ const Topbar = ({ user }) => {
                 <span className="topbar__user-name">{user?.name || 'User'}</span>
                 <span className="topbar__user-role">{user?.role || 'Member'}</span>
               </div>
-              <svg className="topbar__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
             </button>
-
-            {/* Account Dropdown Menu */}
-            {showAccountMenu && (
-              <div className="topbar__dropdown-menu topbar__dropdown-menu--account">
-                {/* User Info Section */}
-                <div className="topbar__account-info">
-                  <div className="topbar__account-avatar">
-                    {user?.avatar ? (
-                      <img src={user.avatar} alt={user.name} />
-                    ) : (
-                      <div className="topbar__account-avatar-placeholder">
-                        {user?.name?.charAt(0) || 'U'}
-                      </div>
-                    )}
-                  </div>
-                  <div className="topbar__account-details">
-                    <p className="topbar__account-name">{user?.name || 'User Name'}</p>
-                    <p className="topbar__account-email">{user?.email || 'user@example.com'}</p>
-                  </div>
-                </div>
-
-                <div className="topbar__dropdown-divider"></div>
-
-                {/* Menu Items */}
-                <div className="topbar__menu-items">
-                  <button className="topbar__menu-item" onClick={handleProfile}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <circle cx="12" cy="7" r="4"/>
-                    </svg>
-                    <span>View Profile</span>
-                  </button>
-
-                  <button className="topbar__menu-item" onClick={handleSettings}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-                      <circle cx="12" cy="12" r="3"/>
-                    </svg>
-                    <span>Settings</span>
-                  </button>
-
-                  <button className="topbar__menu-item" onClick={handleBilling}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <rect x="2" y="5" width="20" height="14" rx="2"/>
-                      <path d="M2 10h20" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <span>Billing & Plans</span>
-                  </button>
-
-                  <button className="topbar__menu-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <span>Upgrade to Pro</span>
-                    <span className="topbar__menu-badge">New</span>
-                  </button>
-                </div>
-
-                <div className="topbar__dropdown-divider"></div>
-
-                {/* Logout */}
-                <button className="topbar__menu-item topbar__menu-item--danger" onClick={handleLogout}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M16 17l5-5-5-5M21 12H9" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  <span>Log out</span>
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>
     </header>
+    <Modal
+      isOpen={showHelpModal}
+      onClose={() => setShowHelpModal(false)}
+      title="Help & Support"
+    >
+      <p>If you need help, reach out to support@sorbit.com or visit the Help Center.</p>
+      <p>We typically respond within 24 hours.</p>
+    </Modal>
+    <Modal
+      isOpen={showProfileModal}
+      onClose={() => setShowProfileModal(false)}
+      title="Profile Info"
+    >
+      <div>
+        <p><strong>Name:</strong> {user?.name || 'User'}</p>
+        <p><strong>Email:</strong> {user?.email || 'user@example.com'}</p>
+        <p><strong>Role:</strong> {user?.role || 'Member'}</p>
+      </div>
+      <div style={{ marginTop: '16px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+        <button className="topbar__view-all-btn" onClick={handleSettings}>
+          Settings
+        </button>
+        <button className="topbar__view-all-btn" onClick={handleBilling}>
+          Billing
+        </button>
+        <button className="topbar__view-all-btn" onClick={() => setShowUpgradeModal(true)}>
+          Upgrade
+        </button>
+        <button className="topbar__view-all-btn" onClick={handleLogout}>
+          Log Out
+        </button>
+      </div>
+    </Modal>
+    <Modal
+      isOpen={showNotificationsModal}
+      onClose={() => setShowNotificationsModal(false)}
+      title="All Notifications"
+      size="lg"
+    >
+      {notifications.length === 0 ? (
+        <p>No notifications yet.</p>
+      ) : (
+        notifications.map((notification) => (
+          <div
+            key={notification.id}
+            className={`topbar__notification-item ${!notification.read ? 'topbar__notification-item--unread' : ''}`}
+            onClick={() => handleNotificationClick(notification.id)}
+          >
+            <div className="topbar__notification-icon">{notification.icon}</div>
+            <div className="topbar__notification-content">
+              <p className="topbar__notification-title">{notification.title}</p>
+              <p className="topbar__notification-message">{notification.message}</p>
+              <span className="topbar__notification-time">{notification.time}</span>
+            </div>
+          </div>
+        ))
+      )}
+    </Modal>
+    <Modal
+      isOpen={showUpgradeModal}
+      onClose={() => setShowUpgradeModal(false)}
+      title="Upgrade to Pro"
+    >
+      <p>Unlock advanced analytics, team collaboration, and priority support.</p>
+      <div style={{ marginTop: '16px', display: 'flex', gap: '8px' }}>
+        <button className="topbar__view-all-btn" onClick={() => navigate('/settings?tab=billing')}>
+          View Plans
+        </button>
+        <button className="topbar__view-all-btn" onClick={() => setShowUpgradeModal(false)}>
+          Maybe Later
+        </button>
+      </div>
+    </Modal>
+    </>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
 import { useAuth } from '../../context/AuthContext';
+import Modal from '../ui/Modal';
 import './MobileLayout.css';
 
 /**
@@ -21,8 +22,33 @@ const MobileLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, toggleTheme, isDark } = useTheme();
-  const { user } = useAuth();
-  const [showNotifications, setShowNotifications] = useState(false);
+  const { user, logout } = useAuth();
+  const [showNotificationsModal, setShowNotificationsModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+
+  const notifications = [
+    {
+      id: 1,
+      icon: '📈',
+      title: 'Post performing well!',
+      message: 'Your latest post has 50+ likes',
+      time: '2h ago',
+    },
+    {
+      id: 2,
+      icon: '🔗',
+      title: 'Account connected',
+      message: 'Instagram linked successfully',
+      time: '5h ago',
+    },
+    {
+      id: 3,
+      icon: '⚠️',
+      title: 'Reconnect needed',
+      message: 'Facebook auth expired',
+      time: '1d ago',
+    },
+  ];
 
   // Bottom navigation items
   const navItems = [
@@ -106,9 +132,9 @@ const MobileLayout = () => {
           {/* Header Actions */}
           <div className="mobile-layout__header-actions">
             {/* Notifications */}
-            <button 
+            <button
               className="mobile-layout__icon-btn"
-              onClick={() => setShowNotifications(!showNotifications)}
+              onClick={() => setShowNotificationsModal(true)}
               aria-label="Notifications"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -137,7 +163,7 @@ const MobileLayout = () => {
             </button>
 
             {/* User Avatar */}
-            <button className="mobile-layout__avatar">
+            <button className="mobile-layout__avatar" onClick={() => setShowProfileModal(true)}>
               {user?.avatar ? (
                 <img src={user.avatar} alt={user.name} />
               ) : (
@@ -174,48 +200,48 @@ const MobileLayout = () => {
         ))}
       </nav>
 
-      {/* Notifications Dropdown (Simple) */}
-      {showNotifications && (
-        <div className="mobile-layout__notifications-overlay" onClick={() => setShowNotifications(false)}>
-          <div className="mobile-layout__notifications-panel" onClick={(e) => e.stopPropagation()}>
-            <div className="mobile-layout__notifications-header">
-              <h3>Notifications</h3>
-              <button onClick={() => setShowNotifications(false)}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M18 6 6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-            </div>
-            <div className="mobile-layout__notifications-list">
-              {/* Notification items */}
-              <div className="mobile-layout__notification-item">
-                <div className="mobile-layout__notification-icon">📈</div>
-                <div className="mobile-layout__notification-content">
-                  <p className="mobile-layout__notification-title">Post performing well!</p>
-                  <p className="mobile-layout__notification-text">Your latest post has 50+ likes</p>
-                  <span className="mobile-layout__notification-time">2h ago</span>
-                </div>
-              </div>
-              <div className="mobile-layout__notification-item">
-                <div className="mobile-layout__notification-icon">🔗</div>
-                <div className="mobile-layout__notification-content">
-                  <p className="mobile-layout__notification-title">Account connected</p>
-                  <p className="mobile-layout__notification-text">Instagram linked successfully</p>
-                  <span className="mobile-layout__notification-time">5h ago</span>
-                </div>
-              </div>
-              <div className="mobile-layout__notification-item">
-                <div className="mobile-layout__notification-icon">⚠️</div>
-                <div className="mobile-layout__notification-content">
-                  <p className="mobile-layout__notification-title">Reconnect needed</p>
-                  <p className="mobile-layout__notification-text">Facebook auth expired</p>
-                  <span className="mobile-layout__notification-time">1d ago</span>
-                </div>
-              </div>
+      <Modal
+        isOpen={showNotificationsModal}
+        onClose={() => setShowNotificationsModal(false)}
+        title="Notifications"
+      >
+        {notifications.map((notification) => (
+          <div key={notification.id} className="mobile-layout__notification-item">
+            <div className="mobile-layout__notification-icon">{notification.icon}</div>
+            <div className="mobile-layout__notification-content">
+              <p className="mobile-layout__notification-title">{notification.title}</p>
+              <p className="mobile-layout__notification-text">{notification.message}</p>
+              <span className="mobile-layout__notification-time">{notification.time}</span>
             </div>
           </div>
+        ))}
+      </Modal>
+
+      <Modal
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+        title="Profile Info"
+      >
+        <div>
+          <p><strong>Name:</strong> {user?.name || 'User'}</p>
+          <p><strong>Email:</strong> {user?.email || 'user@example.com'}</p>
+          <p><strong>Role:</strong> {user?.role || 'Member'}</p>
         </div>
-      )}
+        <div style={{ marginTop: '16px', display: 'flex', gap: '8px' }}>
+          <button className="mobile-layout__action-btn" onClick={() => navigate('/settings')}>
+            Settings
+          </button>
+          <button
+            className="mobile-layout__action-btn"
+            onClick={() => {
+              logout();
+              navigate('/login');
+            }}
+          >
+            Log Out
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 };

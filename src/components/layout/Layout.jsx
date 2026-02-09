@@ -6,7 +6,7 @@ import { useTheme } from '../../hooks/useTheme';
 import { useAuth } from '../../context/AuthContext';
 import './Layout.css';
 
-const Layout = ({ navigationItems }) => {
+const Layout = ({ navigationItems = [] }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { theme, toggleTheme, isDark } = useTheme();
   const location = useLocation();

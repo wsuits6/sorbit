@@ -391,6 +391,22 @@
   color: var(--text-tertiary);
 }
 
+.mobile-layout__action-btn {
+  flex: 1;
+  border: none;
+  background: var(--primary);
+  color: var(--text-inverse);
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.mobile-layout__action-btn:last-child {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
 /* ============================================
    RESPONSIVE - TABLET & DESKTOP
    ============================================ */
