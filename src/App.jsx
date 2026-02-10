@@ -37,8 +37,8 @@ import Register from './pages/Register';
 
 // Mock user data
 const mockUser = {
-  name: 'John Doe',
-  email: 'john.doe@example.com',
+  name: 'Alhassan Ibrahim',
+  email: 'alhassan.ibrahim@sorbit.com',
   role: 'Admin',
   avatar: null,
 };
